@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cheeta Bike Taxi - Srinagar Garhwal</title>
+  
+  <!-- PWA Manifest & Theme Color -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f59e0b">
+
+  <!-- Leaflet CSS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="icon">🏍️</span> <strong>CHEETA</strong> <span class="tagline">Bike Taxi</span>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- Rider & Address Form -->
+    <div class="card">
+      <h2 class="card-title">Book Your Ride</h2>
+      
+      <div class="form-group">
+        <label for="passengerName">Passenger Name</label>
+        <input type="text" id="passengerName" placeholder="Enter full name">
+      </div>
+      
+      <div class="form-group">
+        <label for="pickupAddr">Pickup Address / Landmark</label>
+        <input type="text" id="pickupAddr" placeholder="e.g. NIT Uttarakhand Gate, Srinagar">
+      </div>
+
+      <div class="form-group">
+        <label for="dropAddr">Dropoff Address / Landmark</label>
+        <input type="text" id="dropAddr" placeholder="e.g. Base Hospital, Srikot">
+      </div>
+
+      <label class="map-label">Select Pin Mode &amp; Tap Map:</label>
+      <div class="pin-selector">
+        <button type="button" class="pin-btn active-pickup" id="btnModePickup" onclick="setMode('pickup')">
+          &#128205; Set Pickup Pin
+        </button>
+        <button type="button" class="pin-btn" id="btnModeDrop" onclick="setMode('drop')">
+          &#127937; Set Dropoff Pin
+        </button>
+      </div>
+      
+      <!-- Leaflet Map Canvas -->
+      <div id="map"></div>
+    </div>
+
+    <!-- Tip Selection -->
+    <div class="card">
+      <h3 class="section-title">Add Tip for Cheeta Rider</h3>
+      <div class="tip-group">
+        <button type="button" class="tip-btn selected" onclick="selectTip(0, this)">&#8377;0</button>
+        <button type="button" class="tip-btn" onclick="selectTip(10, this)">&#8377;10</button>
+        <button type="button" class="tip-btn" onclick="selectTip(20, this)">&#8377;20</button>
+        <button type="button" class="tip-btn" onclick="selectTip(50, this)">&#8377;50</button>
+      </div>
+    </div>
+
+    <!-- Fare Summary Card -->
+    <div class="card summary-box">
+      <div class="summary-row">
+        <span>Estimated Distance:</span>
+        <span id="txtDist">0.0 km</span>
+      </div>
+      <div class="summary-row">
+        <span>Fare Rate:</span>
+        <span>&#8377;10 / km</span>
+      </div>
+      <div class="summary-row">
+        <span>Base Ride Fare:</span>
+        <span id="txtFare">&#8377;0</span>
+      </div>
+      <div class="summary-row">
+        <span>Rider Tip:</span>
+        <span id="txtTip">&#8377;0</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total Fare:</span>
+        <span id="txtTotal">&#8377;0</span>
+      </div>
+    </div>
+
+    <!-- WhatsApp Booking CTA -->
+    <button class="btn-whatsapp" onclick="sendWhatsApp()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+      </svg>
+      Book Ride via WhatsApp
+    </button>
+  </div>
+
+  <!-- PWA Install Banner Popup -->
+  <div id="pwaBanner" class="pwa-banner" style="display: none;">
+    <div class="pwa-content">
+      <span>&#128006; <strong>Install Cheeta App</strong> for faster booking!</span>
+      <div class="pwa-actions">
+        <button id="btnPwaInstall" class="pwa-install-btn">Install</button>
+        <button id="btnPwaClose" class="pwa-close-btn">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- External JS with explicit UTF-8 Encoding -->
+  <script src="script.js" charset="utf-8"></script>
+</body>
+</html>
