@@ -29,19 +29,51 @@
     <div class="card">
       <h2 class="card-title">Book Your Ride</h2>
       
+      <!-- Passenger Name Input (Only typing allowed here) -->
       <div class="form-group">
         <label for="passengerName">Passenger Name <span class="required-star">*</span></label>
-        <input type="text" id="passengerName" placeholder="Enter full name">
+        <input type="text" id="passengerName" placeholder="Enter full name (Letters only)">
       </div>
       
+      <!-- Pickup Input with Geolocation Button & Sliding Panel -->
       <div class="form-group">
-        <label for="pickupAddr">Pickup Address / Landmark <span class="required-star">*</span></label>
-        <input type="text" id="pickupAddr" placeholder="e.g. NIT Uttarakhand Gate, Srinagar">
+        <label for="pickupAddr">Pickup Address / Pin <span class="required-star">*</span></label>
+        <div class="input-with-btn">
+          <input type="text" id="pickupAddr" placeholder="Tap map pin or use GPS" readonly>
+          <button type="button" id="btnCurrentLoc" class="btn-location" onclick="useCurrentLocation()" title="Use Current GPS Location">
+            &#127919; Current
+          </button>
+        </div>
+
+        <!-- Sliding Landmark Details Panel -->
+        <div id="pickupLandmarkPanel" class="sliding-panel">
+          <div class="sliding-panel-content">
+            <label for="pickupLandmark" class="sub-label">📍 House / Flat No. & Nearby Landmark:</label>
+            <input type="text" id="pickupLandmark" placeholder="e.g., House #42, Near Taxi Stand" />
+          </div>
+        </div>
       </div>
 
+      <!-- Dropoff Location Select Dropdown -->
       <div class="form-group">
-        <label for="dropAddr">Dropoff Address / Landmark <span class="required-star">*</span></label>
-        <input type="text" id="dropAddr" placeholder="e.g. Base Hospital, Srikot">
+        <label for="dropAddr">Dropoff Location <span class="required-star">*</span></label>
+        <select id="dropAddr" onchange="onDropoffSelectChange()">
+          <option value="">-- Select Dropoff Location --</option>
+          <option value="Gola Bazar, Srinagar">Gola Bazar, Srinagar</option>
+          <option value="Sirkot, Srinagar">Sirkot, Srinagar</option>
+          <option value="Petrol Pump, Srinagar">Petrol Pump, Srinagar</option>
+          <option value="HNBGU University Campus, Srinagar">HNBGU University Campus, Srinagar</option>
+          <option value="Base Hospital, Srikot">Base Hospital, Srikot</option>
+          <option value="NIT Uttarakhand Gate, Srinagar">NIT Uttarakhand Gate, Srinagar</option>
+        </select>
+        
+        <!-- Sliding Landmark Details Panel for Dropoff -->
+        <div id="dropLandmarkPanel" class="sliding-panel">
+          <div class="sliding-panel-content">
+            <label for="dropLandmark" class="sub-label">🏁 House / Flat No. & Nearby Landmark:</label>
+            <input type="text" id="dropLandmark" placeholder="e.g., Block B, Opp. Main Gate" />
+          </div>
+        </div>
       </div>
 
       <label class="map-label">Select Pin Mode &amp; Tap Map <span class="required-star">*</span>:</label>
@@ -128,7 +160,7 @@
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- External JS with explicit UTF-8 Encoding -->
+  <!-- External JS -->
   <script src="script.js" charset="utf-8"></script>
 </body>
 </html>

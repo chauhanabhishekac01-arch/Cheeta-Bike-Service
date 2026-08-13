@@ -108,6 +108,87 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 
+/* Input with Embedded Current Location Button */
+.input-with-btn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input-with-btn input {
+  flex: 1;
+}
+
+.btn-location {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1.5px solid #fcd34d;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-location:hover {
+  background: #f59e0b;
+  color: #ffffff;
+  border-color: #d97706;
+}
+
+.btn-location:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   Sliding Landmark Details Panel (Top-Down)
+   ========================================== */
+.sliding-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.sliding-panel.open {
+  max-height: 120px;
+  opacity: 1;
+  margin-top: 8px;
+}
+
+.sliding-panel-content {
+  background: #fef3c7;
+  border: 1.5px solid #fcd34d;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.sub-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.sliding-panel-content input {
+  background: #ffffff;
+  border-color: #f59e0b;
+  font-size: 0.88rem;
+  padding: 8px 10px;
+}
+
+.sliding-panel-content input:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+
 /* Pin Mode Controls */
 .pin-selector {
   display: flex;
@@ -137,6 +218,16 @@ input:focus {
   background: #fef2f2;
   color: #b91c1c;
   border-color: #ef4444;
+}
+
+/* Disabled Pin Selector Buttons */
+.pin-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+  color: #9ca3af !important;
+  box-shadow: none !important;
 }
 
 /* Map Style */
@@ -297,6 +388,7 @@ input:focus {
     opacity: 1;
   }
 }
+
 /* Required Star Marker */
 .required-star {
   color: #ef4444;
@@ -407,4 +499,58 @@ input:focus {
 @keyframes scaleUp {
   from { transform: scale(0.92); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+/* ==========================================
+   Styled Dropdown Select (Dropoff Location)
+   ========================================== */
+
+.form-group select,
+#dropAddr {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1f2937;
+  background-color: #ffffff;
+  
+  /* Custom Amber Arrow Icon */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23f59e0b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px auto;
+  
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Hover & Focus States */
+#dropAddr:hover {
+  border-color: #f59e0b;
+}
+
+#dropAddr:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+/* Option List Styling */
+#dropAddr option {
+  padding: 10px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  background-color: #ffffff;
+}
+
+/* Disabled State for Pin Button */
+.pin-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(80%);
 }
