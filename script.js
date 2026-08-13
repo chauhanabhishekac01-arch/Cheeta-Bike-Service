@@ -42,7 +42,7 @@ map.on('click', function(e) {
     
     pickupMarker = L.marker([lat, lng], { draggable: true })
       .addTo(map)
-      .bindPopup('<b>Cheeta Pickup</b>')
+      .bindPopup('<b>Pickup Confirmed ✅</b>')
       .openPopup();
 
     pickupMarker.on('dragend', function(evt) {
@@ -55,7 +55,7 @@ map.on('click', function(e) {
 
     dropMarker = L.marker([lat, lng], { draggable: true })
       .addTo(map)
-      .bindPopup('<b>Cheeta Dropoff</b>')
+      .bindPopup('<b>Dropoff Confirmed ✅</b>')
       .openPopup();
 
     dropMarker.on('dragend', function(evt) {
@@ -99,24 +99,48 @@ function recalculateFare() {
   document.getElementById('txtTotal').innerText = '₹' + totalFare;
 }
 
-// Dispatch Booking Message to WhatsApp
+// Dispatch Booking Message to WhatsApp with Validation
 function sendWhatsApp() {
-  const name = document.getElementById('passengerName').value.trim() || 'Passenger';
-  const pickupAddr = document.getElementById('pickupAddr').value.trim() || 'Pinned on map';
-  const dropAddr = document.getElementById('dropAddr').value.trim() || 'Pinned on map';
+  const nameInput = document.getElementById('passengerName');
+  const pickupInput = document.getElementById('pickupAddr');
+  const dropInput = document.getElementById('dropAddr');
+
+  const name = nameInput.value.trim();
+  const pickupAddr = pickupInput.value.trim();
+  const dropAddr = dropInput.value.trim();
+
+  // Validate Required Fields
+  const missingFields = [];
+
+  if (!name) {
+    missingFields.push('Passenger Name');
+  }
+  if (!pickupAddr) {
+    missingFields.push('Pickup Address / Landmark');
+  }
+  if (!dropAddr) {
+    missingFields.push('Dropoff Address / Landmark');
+  }
+  if (!pickupCoords) {
+    missingFields.push('Pickup Map Pin (Tap map to drop pin)');
+  }
+  if (!dropCoords) {
+    missingFields.push('Dropoff Map Pin (Tap map to drop pin)');
+  }
+
+  // Show Validation Modal if details are missing
+  if (missingFields.length > 0) {
+    showValidationModal(missingFields);
+    return;
+  }
 
   const rideFare = Math.round(calculatedDistKm * RATE_PER_KM);
   const totalFare = rideFare + selectedTip;
 
-  const pickupMapLink = pickupCoords 
-    ? `https://www.google.com/maps?q=${pickupCoords.lat.toFixed(6)},${pickupCoords.lng.toFixed(6)}` 
-    : 'Not pinned';
-    
-  const dropMapLink = dropCoords 
-    ? `https://www.google.com/maps?q=${dropCoords.lat.toFixed(6)},${dropCoords.lng.toFixed(6)}` 
-    : 'Not pinned';
+  const pickupMapLink = `https://www.google.com/maps?q=${pickupCoords.lat.toFixed(6)},${pickupCoords.lng.toFixed(6)}`;
+  const dropMapLink = `https://www.google.com/maps?q=${dropCoords.lat.toFixed(6)},${dropCoords.lng.toFixed(6)}`;
 
-  // Construct message with direct emojis
+  // Construct WhatsApp Message
   let msg = `🐆 *CHEETA SERVICE*\n`;
   msg += `─────────────────────\n`;
   msg += `👤 *Name:* ${name}\n\n`;
@@ -129,29 +153,45 @@ function sendWhatsApp() {
   msg += `─────────────────────\n`;
   msg += `Please assign a Cheeta rider for my pickup!`;
 
-  // Use api.whatsapp.com endpoint instead of wa.me to prevent emoji corruption
   const whatsappUrl = `https://api.whatsapp.com/send?phone=${TARGET_PHONE}&text=${encodeURIComponent(msg)}`;
   window.open(whatsappUrl, '_blank');
+}
+
+/* ==========================================
+   Validation Modal Popup Helpers
+   ========================================== */
+
+function showValidationModal(missingList) {
+  const modal = document.getElementById('validationModal');
+  const listContainer = document.getElementById('missingFieldsList');
+
+  if (modal && listContainer) {
+    listContainer.innerHTML = missingList.map(item => `<li>${item}</li>`).join('');
+    modal.style.display = 'flex';
+  }
+}
+
+function closeValidationModal() {
+  const modal = document.getElementById('validationModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
 }
 
 /* ==========================================
    Progressive Web App (PWA) Installation Logic
    ========================================== */
 
-// Register Service Worker for PWA compliance
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration error:', err));
 }
 
 let deferredPrompt = null;
 
-// Catch the native PWA install prompt event
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent immediate automatic browser prompt banner
   e.preventDefault();
   deferredPrompt = e;
 
-  // Display custom install popup exactly 3 seconds after page load
   setTimeout(() => {
     const banner = document.getElementById('pwaBanner');
     if (banner) {
@@ -160,9 +200,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }, 3000);
 });
 
-// Bind PWA Popup Actions on DOM Load
 document.addEventListener('DOMContentLoaded', () => {
-  // Trigger system install dialog on user click
   document.getElementById('btnPwaInstall')?.addEventListener('click', async () => {
     const banner = document.getElementById('pwaBanner');
     if (banner) banner.style.display = 'none';
@@ -174,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Dismiss PWA notification popup
   document.getElementById('btnPwaClose')?.addEventListener('click', () => {
     const banner = document.getElementById('pwaBanner');
     if (banner) banner.style.display = 'none';
