@@ -8,14 +8,20 @@
   "description": "Book bike taxi in Srinagar Garhwal",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3082/3082383.png",
+      "src": "logo.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3082/3082383.png",
+      "src": "logo.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
+    },
+    {
+      "src": "logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ]
 }
